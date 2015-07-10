@@ -12,8 +12,10 @@ module.exports = function(content) {
 		limit = parseInt(query.limit, 10);
 	}
 	var mimetype = query.mimetype || query.minetype || mime.lookup(this.resourcePath);
+	var encoding = query.encoding || 'base64';
 	if(limit <= 0 || content.length < limit) {
-		return "module.exports = " + JSON.stringify("data:" + (mimetype ? mimetype + ";" : "") + "base64," + content.toString("base64"));
+		var data = encoding + "," + content.toString(encoding);
+		return "module.exports = " + JSON.stringify("data:" + (mimetype ? mimetype + ";" : "") + data);
 	} else {
 		var fileLoader = require("file-loader");
 		return fileLoader.call(this, content);
